@@ -18,3 +18,5 @@ from colosseum.rlbench.tasks.stack_cups import StackCups
 from colosseum.rlbench.tasks.straighten_rope import StraightenRope
 from colosseum.rlbench.tasks.turn_oven_on import TurnOvenOn
 from colosseum.rlbench.tasks.wipe_desk import WipeDesk
+
+from colosseum.rlbench.tasks.stack_four_cups import StackFourCups
