@@ -6,6 +6,8 @@ from pyrep.objects.shape import Shape
 from rlbench.backend.conditions import DetectedCondition, NothingGrasped
 from rlbench.backend.task import Task
 from rlbench.const import colors
+import random
+from colosseum.rlbench.extensions.spawn_boundary import SpawnBoundaryExt
 
 
 class StackFourCups(Task):
@@ -29,32 +31,48 @@ class StackFourCups(Task):
                 NothingGrasped(self.robot.gripper),
             ]
         )
+        self.boundary = SpawnBoundaryExt([Shape('boundary')])
 
     def init_episode(self, index: int) -> List[str]:
         self.variation_index = index
+        index = np.random.choice(len(colors))
         target_color_name, target_rgb = colors[index]
 
         random_idx = np.random.choice(len(colors))
         while random_idx == index:
             random_idx = np.random.choice(len(colors))
-        _, other1_rgb = colors[random_idx]
+        other1_color_name, other1_rgb = colors[random_idx]
 
         random_idx = np.random.choice(len(colors))
         while random_idx == index:
             random_idx = np.random.choice(len(colors))
-        _, other2_rgb = colors[random_idx]
+        other2_color_name, other2_rgb = colors[random_idx]
 
         random_idx = np.random.choice(len(colors))
         while random_idx == index:
             random_idx = np.random.choice(len(colors))
-        _, other3_rgb = colors[random_idx]
+        other3_color_name, other3_rgb = colors[random_idx]
 
         self.cup2_visual.set_color(target_rgb)
         self.cup1_visual.set_color(other1_rgb)
         self.cup3_visaul.set_color(other2_rgb)
         self.cup4_visaul.set_color(other3_rgb)
 
+        # switch position of cups
+        pos_cups = [self.cup1.get_position(), self.cup2.get_position(), self.cup3.get_position(), self.cup4.get_position()]
+
+        cup_ind_list = [0, 1, 2, 3]
+        random.shuffle(cup_ind_list)
+
+        self.boundary.clear()
+        self.cup1.set_position(pos_cups[cup_ind_list[0]])
+        self.cup2.set_position(pos_cups[cup_ind_list[1]])
+        self.cup3.set_position(pos_cups[cup_ind_list[2]])
+        self.cup4.set_position(pos_cups[cup_ind_list[3]])
+
         return [
+            f'stack the {other1_color_name} cup and the {other2_color_name} cup and the {other3_color_name} cup '
+            f'on top of the {target_color_name} cup',
             "stack the other cups on top of the %s cup" % target_color_name,
             "place three of the cups onto the odd cup out",
             "put the remaining three cups on top of the %s cup"
