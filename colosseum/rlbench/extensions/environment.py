@@ -66,7 +66,7 @@ class EnvironmentExt(Environment):
                 dyn_random_config,  # type: ignore
                 attach_grasped_objects,
             )
-        elif arg_count == 13:
+        elif arg_count == 13 or 15:
             # Using implementation from RLBench upstream repo
             super().__init__(
                 action_mode,
