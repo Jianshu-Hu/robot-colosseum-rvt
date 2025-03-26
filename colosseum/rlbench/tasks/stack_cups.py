@@ -44,18 +44,19 @@ class StackCups(Task):
         random_idx = np.random.choice(len(colors))
         while random_idx == index:
             random_idx = np.random.choice(len(colors))
-        _, other1_rgb = colors[random_idx]
+        other1_color_name, other1_rgb = colors[random_idx]
 
         random_idx = np.random.choice(len(colors))
         while random_idx == index:
             random_idx = np.random.choice(len(colors))
-        _, other2_rgb = colors[random_idx]
+        other2_color_name, other2_rgb = colors[random_idx]
 
         self.cup2_visual.set_color(target_rgb)
         self.cup1_visual.set_color(other1_rgb)
         self.cup3_visaul.set_color(other2_rgb)
 
         return [
+            f'stack the {other1_color_name} cup and the {other2_color_name} cup on top of the {target_color_name} cup',
             "stack the other cups on top of the %s cup" % target_color_name,
             "place two of the cups onto the odd cup out",
             "put the remaining two cups on top of the %s cup"
